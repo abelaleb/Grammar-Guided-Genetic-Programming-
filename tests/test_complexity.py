@@ -27,4 +27,6 @@ def test_complexity_metrics_reflect_depth_and_size():
 
     assert deep_metrics.node_count > shallow_metrics.node_count
     assert deep_metrics.depth > shallow_metrics.depth
+    assert deep_metrics.terminal_count > shallow_metrics.terminal_count
+
     print("test_complexity_metrics_reflect_depth_and_size passed")
