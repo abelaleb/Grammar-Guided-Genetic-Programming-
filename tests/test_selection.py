@@ -25,6 +25,7 @@ def test_prefer_fittest_breaks_ties_with_complexity():
     tie_simple = _constant_individual(node_count=3, fitness=0.7)
     tie_complex = _constant_individual(node_count=9, fitness=0.7)
     assert prefer_fittest(tie_simple, tie_complex) is tie_simple
+    print("test_prefer_fittest_breaks_ties_with_complexity passed")
 
 
 def test_tournament_selection_uses_preference_logic():
@@ -37,3 +38,4 @@ def test_tournament_selection_uses_preference_logic():
     rng = random.Random(5)
     winner = tournament_selection(population, tournament_size=3, rng=rng)
     assert winner.adjusted_fitness >= 0.3
+    print("test_tournament_selection_uses_preference_logic passed")

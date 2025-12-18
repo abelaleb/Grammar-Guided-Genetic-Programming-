@@ -18,3 +18,4 @@ def test_grammar_injects_terminals_and_generates_valid_expression():
     grammar.inject_terminals("<var>", ["x3", "x4"])
     injected = {production.expansion[0] for production in grammar.productions_for("<var>")}
     assert injected == {"x3", "x4"}
+    print("test_grammar_injects_terminals_and_generates_valid_expression passed")

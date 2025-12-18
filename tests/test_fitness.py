@@ -40,3 +40,4 @@ def test_parsimony_penalty_favors_simpler_expression():
 
     assert simple.raw_fitness == complex_version.raw_fitness
     assert simple_score > complex_score
+    print("test_parsimony_penalty_favors_simpler_expression passed")

@@ -9,3 +9,4 @@ def test_individual_generation_creates_evaluable_expression():
     individual = Individual.generate(grammar, rng=random.Random(3), max_depth=5)
     value = individual.expression.evaluate({"x0": 2.5})
     assert isinstance(value, float)
+    print("test_individual_generation_creates_evaluable_expression passed")
