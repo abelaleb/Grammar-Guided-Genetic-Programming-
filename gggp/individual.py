@@ -11,6 +11,7 @@ from .complexity import ComplexityMetrics, compute_metrics
 
 @dataclass
 class Individual:
+    """Bundle a derivation tree, executable expression, complexity, and fitness."""
     derivation: DerivationNode
     expression: ExpressionNode
     complexity: ComplexityMetrics
@@ -25,6 +26,7 @@ class Individual:
         max_depth: int = 6,
         builder: Optional[ArithmeticTreeBuilder] = None,
     ) -> "Individual":
+        """Randomly sample an individual by generating and translating a derivation."""
         random_generator = rng or random.Random()
         tree_builder = builder or ArithmeticTreeBuilder()
         derivation = grammar.generate(random_generator, max_depth=max_depth)
@@ -33,6 +35,7 @@ class Individual:
         return cls(derivation=derivation, expression=expression, complexity=metrics)
 
     def evaluate(self, evaluator: "FitnessEvaluator") -> float:
+        """Evaluate using the provided fitness evaluator and store the scores."""
         from .fitness import FitnessEvaluator  # local import to avoid circular dependency
 
         if not isinstance(evaluator, FitnessEvaluator):

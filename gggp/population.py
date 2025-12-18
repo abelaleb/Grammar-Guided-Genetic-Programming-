@@ -12,6 +12,7 @@ from .grammar import Grammar
 
 
 class Population:
+    """Maintain and evolve a pool of Individuals via crossover and mutation."""
     def __init__(
         self,
         grammar: Grammar,
@@ -36,20 +37,23 @@ class Population:
         ]
 
     def evaluate(self) -> None:
+        """Evaluate every individual in the population."""
         for ind in self.individuals:
             ind.evaluate(self.evaluator)
 
     def best(self) -> Individual:
+        """Return the current best individual (highest adjusted fitness)."""
         return max(self.individuals, key=lambda i: i.adjusted_fitness)
 
     def evolve_one_generation(self) -> None:
+        """Produce a new generation via tournament selection and variation."""
         new_population: List[Individual] = []
 
         while len(new_population) < self.size:
             if self.rng.random() < self.crossover_rate:
                 p1 = tournament_selection(self.individuals, rng=self.rng)
                 p2 = tournament_selection(self.individuals, rng=self.rng)
-                child = crossover(p1, p2, rng=self.rng)
+                child = crossover(p1, p2, rng=self.rng) 
             else:
                 p = tournament_selection(self.individuals, rng=self.rng)
                 child = mutation(

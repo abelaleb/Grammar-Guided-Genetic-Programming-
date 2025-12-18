@@ -11,11 +11,13 @@ from .complexity import compute_metrics
 
 
 def random_subtree(node: DerivationNode, rng: random.Random) -> DerivationNode:
+    """Pick a random node from the derivation tree."""
     nodes = list(node.traverse())
     return rng.choice(nodes)
 
 
 def clone_tree(node: DerivationNode) -> DerivationNode:
+    """Deep copy a derivation tree."""
     return DerivationNode(
         symbol=node.symbol,
         children=[clone_tree(child) for child in node.children]
@@ -23,6 +25,7 @@ def clone_tree(node: DerivationNode) -> DerivationNode:
 
 
 def replace_subtree(root: DerivationNode, target: DerivationNode, replacement: DerivationNode) -> DerivationNode:
+    """Return a copy of root where the target node is replaced with replacement."""
     if root is target:
         return clone_tree(replacement)
     return DerivationNode(
@@ -37,6 +40,7 @@ def crossover(
     rng: Optional[random.Random] = None,
     builder: Optional[ArithmeticTreeBuilder] = None,
 ) -> Individual:
+    """Swap random subtrees between two parents to create a child."""
     rng = rng or random.Random()
     builder = builder or ArithmeticTreeBuilder()
 
@@ -64,6 +68,7 @@ def mutation(
     max_depth: int = 4,
     builder: Optional[ArithmeticTreeBuilder] = None,
 ) -> Individual:
+    """Regrow a random subtree using the grammar to introduce new genetic material."""
     rng = rng or random.Random()
     builder = builder or ArithmeticTreeBuilder()
 

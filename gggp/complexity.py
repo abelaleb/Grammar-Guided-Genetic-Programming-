@@ -7,6 +7,7 @@ from .grammar import DerivationNode, Grammar
 
 @dataclass(order=True)
 class ComplexityMetrics:
+    """Lightweight container capturing tree size, depth, and terminal count."""
     node_count: int
     depth: int
     terminal_count: int
@@ -16,6 +17,7 @@ class ComplexityMetrics:
 
 
 def compute_metrics(node: DerivationNode) -> ComplexityMetrics:
+    """Compute structural complexity statistics for a derivation tree."""
     node_count, depth, terminal_count = _metrics(node)
     return ComplexityMetrics(node_count=node_count, depth=depth, terminal_count=terminal_count)
 

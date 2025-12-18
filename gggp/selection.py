@@ -7,6 +7,7 @@ from .individual import Individual
 
 
 def prefer_fittest(individual_a: Individual, individual_b: Individual, tolerance: float = 1e-12) -> Individual:
+    """Choose the fitter individual, breaking near-ties with lower complexity."""
     if individual_a.adjusted_fitness is None or individual_b.adjusted_fitness is None:
         raise ValueError("Individuals must be evaluated before comparison")
 
@@ -28,6 +29,7 @@ def tournament_selection(
     tournament_size: int = 3,
     rng: Optional[random.Random] = None,
 ) -> Individual:
+    """Run a simple tournament and return the winner."""
     participants = list(population)
     if len(participants) < tournament_size:
         raise ValueError("Tournament size cannot exceed population size")

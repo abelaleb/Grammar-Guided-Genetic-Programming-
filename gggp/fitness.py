@@ -8,11 +8,13 @@ from .tree import ExpressionNode
 
 @dataclass(frozen=True)
 class FitnessCase:
+    """Single supervised learning example (inputs + expected target)."""
     inputs: dict[str, float]
     target: float
 
 
 class FitnessEvaluator:
+    """Compute fitness by comparing expression outputs to known targets."""
     def __init__(
         self,
         cases: Iterable[FitnessCase],
@@ -24,6 +26,7 @@ class FitnessEvaluator:
         self.penalty_coefficient = penalty_coefficient
 
     def evaluate_expression(self, expression: ExpressionNode) -> float:
+        """Return negative MSE of the expression across all fitness cases."""
         errors: List[float] = []
         for case in self.cases:
             try:
@@ -35,8 +38,8 @@ class FitnessEvaluator:
         return -mse
 
     def evaluate(self, individual: "Individual") -> float:
+        """Evaluate an individual, storing raw and adjusted fitness scores."""
         from .individual import Individual  # local import to prevent circular dependency
-
         if not isinstance(individual, Individual):
             raise TypeError("Expected an Individual instance")
         raw_fitness = self.evaluate_expression(individual.expression)
@@ -47,5 +50,6 @@ class FitnessEvaluator:
         return adjusted_fitness
 
     def with_penalty(self, penalty_coefficient: float) -> "FitnessEvaluator":
+        """Return a copy of this evaluator with a different penalty coefficient."""
         clone = FitnessEvaluator(self.cases, penalty_coefficient=penalty_coefficient)
         return clone

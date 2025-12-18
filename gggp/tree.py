@@ -7,6 +7,7 @@ from .grammar import DerivationNode, Grammar
 
 
 def _safe_division(left: float, right: float) -> float:
+    """Divide two numbers while guarding against near-zero denominators."""
     if abs(right) < 1e-12:
         raise ZeroDivisionError("Division by zero in expression evaluation")
     return left / right
@@ -22,11 +23,13 @@ OPERATORS: Dict[str, Callable[[float, float], float]] = {
 
 @dataclass
 class ExpressionNode:
+    """Evaluatable node in an arithmetic expression tree."""
     kind: str
     value: str | float
     children: List["ExpressionNode"] = field(default_factory=list)
 
     def evaluate(self, context: Dict[str, float]) -> float:
+        """Evaluate this node using the provided variable assignments."""
         if self.kind == "variable":
             if self.value not in context:
                 raise KeyError(f"Variable {self.value} missing from context")
@@ -47,6 +50,7 @@ class ExpressionNode:
         raise ValueError(f"Unsupported expression node kind {self.kind}")
 
     def collect_variables(self) -> List[str]:
+        """Return all variable identifiers referenced below this node."""
         if self.kind == "variable":
             return [str(self.value)]
         result: List[str] = []
@@ -55,16 +59,20 @@ class ExpressionNode:
         return result
 
     def __str__(self) -> str:
+        """Render the node as an infix string for debugging."""
         if self.kind == "operator":
             return f"({self.children[0]} {self.value} {self.children[1]})"
         return str(self.value)
 
 
 class ArithmeticTreeBuilder:
+    """Convert derivation trees into executable arithmetic expression trees."""
     def build(self, derivation: DerivationNode) -> ExpressionNode:
+        """Public entrypoint that builds an ExpressionNode tree."""
         return self._convert(derivation)
 
     def _convert(self, node: DerivationNode) -> ExpressionNode:
+        """Recursively translate a derivation node into an ExpressionNode."""
         if node.symbol == "<expr>":
             if not node.children:
                 raise ValueError("<expr> nodes must have children")
@@ -96,6 +104,7 @@ class ArithmeticTreeBuilder:
         raise ValueError(f"Unhandled node symbol {node.symbol}")
 
     def _extract_token(self, node: DerivationNode) -> str:
+        """Extract the literal token stored at a derivation node."""
         if not node.children and not Grammar.is_non_terminal(node.symbol):
             return node.symbol
         if node.children:
